@@ -11,9 +11,6 @@ const thoughtController = {
   getSingleThought(req, res) {
     Thought.findOne({ _id: req.params.thoughtId })
       .then((thoughts) => {
-        if (!thoughts) {
-          return res.status(404).json({ message: 'No thought with this id!' });
-        }
         res.json(thoughts);
       })
   },
@@ -27,20 +24,13 @@ const thoughtController = {
         );
       })
       .then((users) => {
-        if (!users) {
-          return res.status(404).json({ message: 'Thought created but no user with this id!' });
-        }
-
-        res.json({ message: 'Thought successfully created!' });
+        res.json({ message: 'Thought created!' });
       })
   },
 
   updateThought(req, res) {
     Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $set: req.body }, { runValidators: true, new: true })
       .then((thoughts) => {
-        if (!thoughts) {
-          return res.status(404).json({ message: 'No thought with this id!' });
-        }
         res.json(thoughts);
       })
   },
@@ -48,10 +38,6 @@ const thoughtController = {
   deleteThought(req, res) {
     Thought.findOneAndRemove({ _id: req.params.thoughtId })
       .then((thoughts) => {
-        if (!thoughts) {
-          return res.status(404).json({ message: 'No thought with this id!' });
-        }
-
         return User.findOneAndUpdate(
           { thoughts: req.params.thoughtId },
           { $pull: { thoughts: req.params.thoughtId } },
@@ -59,10 +45,7 @@ const thoughtController = {
         );
       })
       .then((users) => {
-        if (!users) {
-          return res.status(404).json({ message: 'Thought created but no user with this id!' });
-        }
-        res.json({ message: 'Thought successfully deleted!' });
+        res.json({ message: 'Thought deleted!' });
       })
   },
 };
