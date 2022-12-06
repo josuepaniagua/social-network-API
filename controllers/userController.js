@@ -16,9 +16,6 @@ const userController = {
       .populate('friends')
       .populate('thoughts')
       .then((users) => {
-        if (!users) {
-          return res.status(404).json({ message: 'No user with this id!' });
-        }
         res.json(users);
       })
   },
@@ -42,31 +39,20 @@ const userController = {
       }
     )
       .then((users) => {
-        if (!users) {
-          return res.status(404).json({ message: 'No user with this id!' });
-        }
         res.json(users);
       })
   },
 
   deleteUser(req, res) {
     User.findOneAndDelete({ _id: req.params.userId })
-      .then((users) => {
-        if (!users) {
-          return res.status(404).json({ message: 'No user with this id!' });
-        }
-      })
       .then(() => {
-        res.json({ message: 'User and associated thoughts deleted!' });
+        res.json({ message: 'User and thoughts deleted!' });
       })
   },
 
   addFriend(req, res) {
     User.findOneAndUpdate({ _id: req.params.userId }, { $addToSet: { friends: req.params.friendId } }, { new: true })
       .then((users) => {
-        if (!users) {
-          return res.status(404).json({ message: 'No user with this id!' });
-        }
         res.json(users);
       })
 
@@ -75,9 +61,6 @@ const userController = {
   removeFriend(req, res) {
     User.findOneAndUpdate({ _id: req.params.userId }, { $pull: { friends: req.params.friendId } }, { new: true })
       .then((users) => {
-        if (!users) {
-          return res.status(404).json({ message: 'No user with this id!' });
-        }
         res.json(users);
       })
   },
